@@ -172,11 +172,28 @@ export class OpenDialog extends EventTarget {
     workarea.append(label);
     elements.freespace = freespace;
 
-    input = document.createElement('input');
-    input.type = 'text';
+    var available_download_dirs = this.controller.session_properties['download-dir'].split(",");
+    if (available_download_dirs.length < 1) {
+      input = document.createElement('input');
+      input.type = 'text';
+      //input.id = 'add-dialog-folder-input';
+      //input.addEventListener('change', () => this._updateFreeSpaceInAddDialog());
+      input.value = this.controller.session_properties['download-dir'];
+      //workarea.append(input);
+      //elements.folder_input = input;
+    } else {
+      input = document.createElement('select');
+      //Create and append the options
+      for (var i = 0; i < available_download_dirs.length ; i++) {
+          var option = document.createElement("option");
+          option.value = available_download_dirs[i];
+          option.text = available_download_dirs[i];
+          input.appendChild(option);
+      }
+    }
     input.id = 'add-dialog-folder-input';
-    input.addEventListener('change', () => this._updateFreeSpaceInAddDialog());
-    input.value = this.controller.session_properties['download-dir'];
+    //TODO: Connect the change event again
+    //input.addEventListener('change', () => this._updateFreeSpaceInAddDialog());
     workarea.append(input);
     elements.folder_input = input;
 
